@@ -1,35 +1,23 @@
-# ipreconx
+# IPReconX: Automated Suspicious IP Blacklist Aggregator
 
-This template should help get you started developing with Vue 3 in Vite.
+## Overview  
+IPReconX is a system designed to collect, aggregate, and maintain an auto-updating blacklist of suspicious IP addresses from multiple open threat intelligence feeds. The project focuses on providing reliable, normalized, and deduplicated IP threat data for cybersecurity applications.
 
-## Recommended IDE Setup
+---
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+## Objectives  
+- Automatically fetch suspicious IP data from various open-source threat intelligence feeds  
+- Normalize and aggregate data into a unified blacklist  
+- Maintain an up-to-date blacklist with continuous automated updates  
+- Provide access to blacklist data for security tools and analysts  
 
-## Customize configuration
 
-See [Vite Configuration Reference](https://vite.dev/config/).
+---
 
-## Project Setup
+## Authors  
+Aryan Biju, Richu Suresh
 
-```sh
-npm install
-```
+---
+---
 
-### Compile and Hot-Reload for Development
-
-```sh
-npm run dev
-```
-
-### Compile and Minify for Production
-
-```sh
-npm run build
-```
-
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-npm run lint
-```
+© All rights reserved, [Finessefleet Foundation](https://finessefleet.com), 2025  
