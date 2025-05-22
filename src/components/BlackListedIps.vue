@@ -1,5 +1,6 @@
 <template>
-  <h1>IPRECONX</h1>
+
+  <img src="@/assets/images/logo.png" class="logo"/>
 
   <!-- 🔍 Search box -->
   <input
@@ -106,7 +107,6 @@ const visiblePages = computed(() => {
 
 <style>
 .container {
-  background-color: #fff;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   gap: 10px;
@@ -182,5 +182,10 @@ const visiblePages = computed(() => {
 
 .page-button:hover:not(.active) {
   background-color: #ddd;
+}
+.logo {
+    display: block;
+    margin: auto;
+    width: 150px;
 }
 </style>
