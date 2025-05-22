@@ -21,13 +21,22 @@
     </div>
   </div>
 
-  <!-- 📌 Pagination Controls -->
+  <!-- 📌 Pagination Controls with Page Numbers -->
   <div class="pagination">
+    <button :disabled="currentPage === 1" @click="currentPage = 1">First</button>
     <button :disabled="currentPage === 1" @click="currentPage--">Prev</button>
 
-    <span>Page {{ currentPage }} of {{ totalPages }}</span>
+    <button
+      v-for="page in visiblePages"
+      :key="page"
+      @click="currentPage = page"
+      :class="['page-button', { active: currentPage === page }]"
+    >
+      {{ page }}
+    </button>
 
     <button :disabled="currentPage === totalPages" @click="currentPage++">Next</button>
+    <button :disabled="currentPage === totalPages" @click="currentPage = totalPages">Last</button>
   </div>
 </template>
 
@@ -42,6 +51,7 @@ const itemsPerPage = 100
 const url =
   "https://raw.githubusercontent.com/firehol/blocklist-ipsets/master/firehol_level1.netset"
 
+// Fetch IPs
 async function getBlackListedIps() {
   try {
     const response = await fetch(url)
@@ -54,26 +64,43 @@ async function getBlackListedIps() {
   }
 }
 
-// Initial fetch
+// Initial load
 getBlackListedIps()
 
-// Filter by search
+// Filtered IPs by search
 const filteredIps = computed(() =>
   blacklistedIps.value.filter(ip =>
     ip.includes(searchTerm.value.trim())
   )
 )
 
-// Total pages based on filtered result
+// Total pages
 const totalPages = computed(() =>
   Math.ceil(filteredIps.value.length / itemsPerPage)
 )
 
-// Slice for current page
+// Paginated slice of IPs
 const paginatedIps = computed(() => {
   const start = (currentPage.value - 1) * itemsPerPage
   const end = start + itemsPerPage
   return filteredIps.value.slice(start, end)
+})
+
+// Visible page buttons (e.g., 3 4 [5] 6 7)
+const visiblePages = computed(() => {
+  const total = totalPages.value
+  const current = currentPage.value
+  const range = 2
+
+  const start = Math.max(1, current - range)
+  const end = Math.min(total, current + range)
+
+  const pages = []
+  for (let i = start; i <= end; i++) {
+    pages.push(i)
+  }
+
+  return pages
 })
 </script>
 
@@ -122,12 +149,13 @@ const paginatedIps = computed(() => {
   margin-top: 20px;
   display: flex;
   justify-content: center;
-  gap: 20px;
+  gap: 8px;
   align-items: center;
+  flex-wrap: wrap;
 }
 
 .pagination button {
-  padding: 6px 12px;
+  padding: 6px 10px;
   font-size: 14px;
   border: none;
   background-color: #007bff;
@@ -141,7 +169,18 @@ const paginatedIps = computed(() => {
   cursor: not-allowed;
 }
 
-.pagination span {
-  font-size: 16px;
+.page-button {
+  background-color: #eee;
+  color: #333;
+}
+
+.page-button.active {
+  background-color: #007bff;
+  color: white;
+  font-weight: bold;
+}
+
+.page-button:hover:not(.active) {
+  background-color: #ddd;
 }
 </style>
