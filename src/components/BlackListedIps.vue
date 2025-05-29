@@ -1,170 +1,87 @@
 <template>
-
-
-<div class="logo">
-
-    <img src="/home/aryan/Documents/ipreconx/src/assets/images/file_00000000ec2461f58d2b3aa3c6a69357.png"></img>
-
-</div>
-
+  <img src="@/assets/images/logo.png" class="w-50 m-auto"/>
   
-  <input
+  <div class="flex justify-center">
+    <input
     type="text"
     v-model="searchTerm"
     placeholder="Search IP address..."
-    class="search-box"
-  />
+    class="bg-white border border-gray-100 px-2 py-1 rounded" />
+
+    <button @click="getBlackListedIps" class="bg-green-700 text-white py-1 px-2 border border-green-800 mx-3 rounded">
+      <span v-if="loading">Loading</span>
+      <span v-else>Refresh IP List</span>
+    </button>
+  </div>
 
 
-  <button @click="getBlackListedIps" class="refresh-button">
-    Refresh IP List
-  </button>
-
-  <div class="container">
-    <div class="ipaddress" v-for="ip in paginatedIps" :key="ip">
+  <div class="flex flex-wrap justify-center gap-3 my-5" v-if="paginatedIps.length">
+    <div class="bg-gray-100 rounded p-2 w-[150px]" v-for="ip in paginatedIps" :key="ip">
       {{ ip }}
     </div>
   </div>
-
-  <div class="pagination">
-    <button :disabled="currentPage === 1" @click="currentPage--">Prev</button>
-
-    <span>Page {{ currentPage }} of {{ totalPages }}</span>
-
-    <button :disabled="currentPage === totalPages" @click="currentPage++">Next</button>
+  <div class="text-gray-100 text-center my-50" v-else >
+    No blacklisted IP address found containing {{ searchTerm }}
   </div>
+
+  <Pagination
+    :currentPage="currentPage"
+    :totalPages="totalPages"
+    @update:currentPage="currentPage = $event"/>
+    
 </template>
 
 <script setup>
-import { ref, computed } from "vue"
+import { ref, computed } from "vue";
+import Pagination from '@/components/Pagination.vue'
 
 const blacklistedIps = ref([])
 const searchTerm = ref("")
 const currentPage = ref(1)
+const loading = ref(false)
 const itemsPerPage = 100
 
-const url =
-  "https://raw.githubusercontent.com/firehol/blocklist-ipsets/master/firehol_level1.netset"
+const url = "https://raw.githubusercontent.com/firehol/blocklist-ipsets/master/firehol_level1.netset"
 
+// Fetch IPs
 async function getBlackListedIps() {
   try {
+    loading.value = true;
     const response = await fetch(url)
     const rawContent = await response.text()
     const regex = /\b(?:\d{1,3}\.){3}\d{1,3}\b/g
     blacklistedIps.value = rawContent.match(regex) || []
+    searchTerm.value = '';
     currentPage.value = 1
   } catch (error) {
     console.error("Error fetching IP list:", error)
+  } finally {
+    setTimeout(() => {
+      loading.value = false;
+    }, 1000);
   }
 }
 
-// Initial fetch
+// Initial load
 getBlackListedIps()
 
-// Filter by search
+// Filtered IPs by search
 const filteredIps = computed(() =>
   blacklistedIps.value.filter(ip =>
     ip.includes(searchTerm.value.trim())
   )
 )
 
-// Total pages based on filtered result
-const totalPages = computed(() =>
-  Math.ceil(filteredIps.value.length / itemsPerPage)
-)
+// Total pages
+const totalPages = computed(() => {
+  currentPage.value = 1;
+  return Math.ceil(filteredIps.value.length / itemsPerPage);
+})
 
-// Slice for current page
+// Paginated slice of IPs
 const paginatedIps = computed(() => {
   const start = (currentPage.value - 1) * itemsPerPage
   const end = start + itemsPerPage
   return filteredIps.value.slice(start, end)
 })
 </script>
-
-<style>
-
-.container {
-  background-color: #fff;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 10px;
-}
-
-.ipaddress {
-  background-color: #f1f1f1;
-  padding: 7px 15px;
-  border-radius: 5px;
-  font-family: 'Courier New', Courier, monospace;
-  color: #333;
-}
-
-.search-box {
-  margin: 10px 10px 10px 0;
-  padding: 8px;
-  width: 100%;
-  max-width: 400px;
-  font-size: 16px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-.refresh-button {
-  padding: 8px 12px;
-  font-size: 16px;
-  margin-bottom: 20px;
-  background-color: #4CAF50;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.refresh-button:hover {
-  background-color: #45a049;
-}
-
-.pagination {
-  margin-top: 20px;
-  display: flex;
-  justify-content: center;
-  gap: 20px;
-  align-items: center;
-}
-
-.pagination button {
-  padding: 6px 12px;
-  font-size: 14px;
-  border: none;
-  background-color: #007bff;
-  color: white;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.pagination button:disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
-}
-
-.pagination span {
-  font-size: 16px;
-
-
-}
-
-.logo {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 30px 0 20px;
-  background-color: #fff;
-}
-
-.logo img {
-  width: 180px;
-  height: auto;
-  object-fit: contain;
-}
-
-
-</style>
