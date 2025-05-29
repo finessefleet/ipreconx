@@ -1,7 +1,13 @@
 <template>
-  <h1>IPRECONX</h1>
 
-  <!-- 🔍 Search box -->
+
+<div class="logo">
+
+    <img src="/home/aryan/Documents/ipreconx/src/assets/images/file_00000000ec2461f58d2b3aa3c6a69357.png"></img>
+
+</div>
+
+  
   <input
     type="text"
     v-model="searchTerm"
@@ -9,19 +15,17 @@
     class="search-box"
   />
 
-  <!-- 🔁 Refresh button -->
+
   <button @click="getBlackListedIps" class="refresh-button">
     Refresh IP List
   </button>
 
-  <!-- 📄 IP Address List -->
   <div class="container">
     <div class="ipaddress" v-for="ip in paginatedIps" :key="ip">
       {{ ip }}
     </div>
   </div>
 
-  <!-- 📌 Pagination Controls -->
   <div class="pagination">
     <button :disabled="currentPage === 1" @click="currentPage--">Prev</button>
 
@@ -48,7 +52,7 @@ async function getBlackListedIps() {
     const rawContent = await response.text()
     const regex = /\b(?:\d{1,3}\.){3}\d{1,3}\b/g
     blacklistedIps.value = rawContent.match(regex) || []
-    currentPage.value = 1 // reset to page 1 on refresh
+    currentPage.value = 1
   } catch (error) {
     console.error("Error fetching IP list:", error)
   }
@@ -78,6 +82,7 @@ const paginatedIps = computed(() => {
 </script>
 
 <style>
+
 .container {
   background-color: #fff;
   display: grid;
@@ -143,5 +148,23 @@ const paginatedIps = computed(() => {
 
 .pagination span {
   font-size: 16px;
+
+
 }
+
+.logo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 30px 0 20px;
+  background-color: #fff;
+}
+
+.logo img {
+  width: 180px;
+  height: auto;
+  object-fit: contain;
+}
+
+
 </style>
