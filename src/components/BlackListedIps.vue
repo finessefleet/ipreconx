@@ -17,8 +17,7 @@
 
   <div class="flex flex-wrap justify-center gap-3 my-5" v-if="paginatedIps.length">
     <div class="bg-gray-100 rounded p-2 w-[150px]" v-for="ip in paginatedIps" :key="ip" @click="getIpLocation(ip)">
-      {{ ip }} <br>
-      {{ ipLocationDetails }}
+      {{ ip }}
     </div>
   </div>
   <div class="text-gray-100 text-center my-50" v-else >
