@@ -16,8 +16,9 @@
 
 
   <div class="flex flex-wrap justify-center gap-3 my-5" v-if="paginatedIps.length">
-    <div class="bg-gray-100 rounded p-2 w-[150px]" v-for="ip in paginatedIps" :key="ip">
-      {{ ip }}
+    <div class="bg-gray-100 rounded p-2 w-[150px]" v-for="ip in paginatedIps" :key="ip" @click="getIpLocation(ip)">
+      {{ ip }} <br>
+      {{ ipLocationDetails }}
     </div>
   </div>
   <div class="text-gray-100 text-center my-50" v-else >
@@ -82,4 +83,11 @@ const paginatedIps = computed(() => {
   const end = start + itemsPerPage
   return filteredIps.value.slice(start, end)
 })
+
+const getIpLocation = (ipaddress) => {
+  fetch(`https://api.iplocation.net/?ip=${ipaddress}`).then(async res => {
+    const {country_name, isp} = await res.json();
+    alert(country_name + ' : ' + isp);
+  });
+}
 </script>

@@ -1,19 +1,23 @@
 <!-- components/Pagination.vue -->
 <template>
-  <div class="flex justify-center my-3" v-if="totalPages > 1">
-    <button class="px-3 py-1 bg-indigo-500 rounded mx-1 text-gray-100" :hidden="currentPage === 1" @click="changePage(1)">First</button>
-    <button class="px-3 py-1 bg-indigo-500 rounded mx-1 text-gray-100" :hidden="currentPage === 1" @click="changePage(currentPage - 1)">Prev</button>
+  <div v-if="totalPages > 1">
+    <div class="flex justify-center my-3 text-gray-100">Showing {{currentPage}} of {{ totalPages }} pages</div>
+    <div class="flex justify-center my-3">
+      <button class="px-3 py-1 bg-indigo-500 rounded mx-1 text-gray-100" :hidden="currentPage === 1"
+        @click="changePage(1)">First</button>
+      <button class="px-3 py-1 bg-indigo-500 rounded mx-1 text-gray-100" :hidden="currentPage === 1"
+        @click="changePage(currentPage - 1)">Prev</button>
 
-    <button
-      v-for="page in visiblePages"
-      :key="page"
-      @click="changePage(page)"
-      :class="['px-3 py-1 bg-indigo-500 rounded mx-1 text-gray-100', { 'bg-green-600': currentPage === page }]">
+      <button v-for="page in visiblePages" :key="page" @click="changePage(page)"
+        :class="['px-3 py-1 bg-indigo-500 rounded mx-1 text-gray-100', { 'bg-green-600': currentPage === page }]">
         {{ page }}
-    </button>
+      </button>
 
-    <button class="px-3 py-1 bg-indigo-500 rounded mx-1 text-gray-100" :hidden="currentPage === totalPages" @click="changePage(currentPage + 1)">Next</button>
-    <button class="px-3 py-1 bg-indigo-500 rounded mx-1 text-gray-100" :hidden="currentPage === totalPages" @click="changePage(totalPages)">Last</button>
+      <button class="px-3 py-1 bg-indigo-500 rounded mx-1 text-gray-100" :hidden="currentPage === totalPages"
+        @click="changePage(currentPage + 1)">Next</button>
+      <button class="px-3 py-1 bg-indigo-500 rounded mx-1 text-gray-100" :hidden="currentPage === totalPages"
+        @click="changePage(totalPages)">Last</button>
+    </div>
   </div>
 </template>
 
