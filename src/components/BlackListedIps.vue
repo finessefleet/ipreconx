@@ -56,9 +56,7 @@ async function getBlackListedIps() {
   } catch (error) {
     console.error("Error fetching IP list:", error)
   } finally {
-    setTimeout(() => {
-      loading.value = false;
-    }, 1000);
+    loading.value = false;
   }
 }
 
