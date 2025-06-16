@@ -1,6 +1,6 @@
 // tests/unit/BlacklistIpPage.spec.js
 import { mount, flushPromises } from '@vue/test-utils';
-import BlacklistIpPage from '../../src/components/BlackListedIps.vue'; // adjust path as needed
+import BlacklistIpPage from '../../src/pages/BlackListedIps.vue'; // adjust path as needed
 
 // Mock global fetch
 global.fetch = jest.fn(() =>

@@ -25,10 +25,7 @@
 
   <!-- Display paginated IPs if available -->
   <div class="flex flex-wrap justify-center gap-3 my-5" v-if="paginatedIps.length">
-    <div
-      class="bg-gray-100 rounded p-2 w-[150px]"
-      v-for="ip in paginatedIps"
-      :key="ip">
+    <div class="bg-gray-100 rounded p-2 w-[150px]" v-for="ip in paginatedIps" :key="ip" @click="getIpLocation(ip)">
       {{ ip }}
     </div>
   </div>
@@ -49,9 +46,9 @@
 <script setup>
 // Import Vue’s Composition API methods
 import { ref, computed, watch } from "vue";
-
 // Import Pagination component (assumed to be reusable)
 import Pagination from '@/components/Pagination.vue';
+import { useRouter } from "vue-router";
 
 const blacklistedIps = ref([]);
 const searchTerm = ref("");
@@ -59,6 +56,7 @@ const currentPage = ref(1);
 const loading = ref(false);
 const itemsPerPage = 100;
 
+const router = useRouter();
 // Remote URL where the IP blacklist is hosted
 const url = "https://raw.githubusercontent.com/firehol/blocklist-ipsets/master/firehol_level1.netset";
 
@@ -114,8 +112,17 @@ const totalPages = computed(() => {
  * Handles pagination slicing logic.
  */
 const paginatedIps = computed(() => {
-  const start = (currentPage.value - 1) * itemsPerPage;
-  const end = start + itemsPerPage;
-  return filteredIps.value.slice(start, end);
-});
+  const start = (currentPage.value - 1) * itemsPerPage
+  const end = start + itemsPerPage
+  return filteredIps.value.slice(start, end)
+})
+
+const getIpLocation = (ipaddress) => {
+  // https://www.virustotal.com/api/v3/ip_addresses/{ip}
+  fetch(`https://api.iplocation.net/?ip=${ipaddress}`).then(async res => {
+    const {country_name, isp} = await res.json();
+    alert(country_name + ' : ' + isp);
+  });
+  router.push({name: 'ip', params: { ip: ipaddress}})
+}
 </script>

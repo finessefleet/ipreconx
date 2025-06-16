@@ -1,7 +1,7 @@
 <script setup>
-import BlackListedIps from '@/components/BlackListedIps.vue'
+import { RouterView } from 'vue-router';
 </script>
 
 <template>
-  <BlackListedIps/>
+  <RouterView/>
 </template>
