@@ -4,7 +4,7 @@
     <div class="flex flex-col md:flex-row gap-6 bg-gray-800 p-6 rounded-lg shadow-lg">
       <div class="flex flex-col items-center justify-center bg-gray-700 w-32 h-32">
         <div class="text-3xl font-bold text-green-400">0</div>
-        <div class="text-sm text-gray-300">/ 94</div>
+        <div class="text-sm text-gray-300">/ 100</div>
         <div class="text-xs mt-1 text-gray-400">Community Score</div>
       </div>
 
@@ -45,9 +45,7 @@
     <!-- Tabs -->
     <div class="flex mt-6 border-b border-gray-700">
       <button class="px-4 py-2 text-green-400 border-b-2 border-green-400">Detection</button>
-      <button class="px-4 py-2 text-gray-400 hover:text-white">Details</button>
-      <button class="px-4 py-2 text-gray-400 hover:text-white">Relations</button>
-      <button class="px-4 py-2 text-gray-400 hover:text-white">Community</button>
+
     </div>
 
     <!-- Vendor Table -->
