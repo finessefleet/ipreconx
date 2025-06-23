@@ -6,15 +6,20 @@
       <button class="px-3 py-1 bg-indigo-500 rounded mx-1 text-gray-100" :hidden="currentPage === 1"
         @click="changePage(1)">First</button>
       <button class="px-3 py-1 bg-indigo-500 rounded mx-1 text-gray-100" :hidden="currentPage === 1"
-        @click="changePage(currentPage - 1)">Prev</button>
+        @click="changePage(currentPage - 1)">
+        <i class="fa fa-chevron-left mr-1"></i>
+        Prev</button>
 
       <button v-for="page in visiblePages" :key="page" @click="changePage(page)"
-        :class="['px-3 py-1 bg-indigo-500 rounded mx-1 text-gray-100', { 'bg-green-600': currentPage === page }]">
+        class="px-3 py-1 rounded mx-1 text-gray-100"
+        :class="currentPage === page ? 'bg-green-600': 'bg-indigo-500'">
         {{ page }}
       </button>
 
       <button class="px-3 py-1 bg-indigo-500 rounded mx-1 text-gray-100" :hidden="currentPage === totalPages"
-        @click="changePage(currentPage + 1)">Next</button>
+        @click="changePage(currentPage + 1)">Next
+        <i class="fa fa-chevron-right mr-1"></i>
+      </button>
       <button class="px-3 py-1 bg-indigo-500 rounded mx-1 text-gray-100" :hidden="currentPage === totalPages"
         @click="changePage(totalPages)">Last</button>
     </div>

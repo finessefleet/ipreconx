@@ -19,13 +19,16 @@
     >
       <!-- Conditional text based on loading state -->
       <span v-if="loading">Loading</span>
-      <span v-else>Refresh IP List</span>
+      <span v-else><i class="fa fa-refresh mr-2"></i>Refresh</span>
+    </button>
+    <button  class="bg-indigo-500 rounded mx-1 text-gray-100 px-2" @click="downloadBlacklistedTxt">
+      <i class="fa fa-download mr-1"></i> Download
     </button>
   </div>
 
   <!-- Display paginated IPs if available -->
   <div class="flex flex-wrap justify-center gap-3 my-5" v-if="paginatedIps.length">
-    <div class="bg-gray-100 rounded p-2 w-[150px]" v-for="ip in paginatedIps" :key="ip" @click="getIpLocation(ip)">
+    <div class="bg-gray-100 rounded p-2 w-[150px] hover:bg-indigo-500 hover:text-gray-100 cursor-pointer" v-for="ip in paginatedIps" :key="ip" @click="getIpLocation(ip)">
       {{ ip }}
     </div>
   </div>
@@ -58,7 +61,8 @@ const itemsPerPage = 100;
 
 const router = useRouter();
 // Remote URL where the IP blacklist is hosted
-const url = "https://raw.githubusercontent.com/firehol/blocklist-ipsets/master/firehol_level1.netset";
+// const url = "https://raw.githubusercontent.com/firehol/blocklist-ipsets/master/firehol_level1.netset";
+const url = "https://raw.githubusercontent.com/stamparm/ipsum/master/ipsum.txt";
 
 /**
  * Fetches the blacklisted IP addresses from the given remote URL.
@@ -118,11 +122,25 @@ const paginatedIps = computed(() => {
 })
 
 const getIpLocation = (ipaddress) => {
-  // https://www.virustotal.com/api/v3/ip_addresses/{ip}
-  fetch(`https://api.iplocation.net/?ip=${ipaddress}`).then(async res => {
-    const {country_name, isp} = await res.json();
-    alert(country_name + ' : ' + isp);
-  });
   router.push({name: 'ip', params: { ip: ipaddress}})
+}
+
+const downloadBlacklistedTxt = () => {
+  // Join IPs into one string, separated by new lines
+  const textContent = filteredIps.value.join("\n");
+
+  // Create a Blob from the string
+  const blob = new Blob([textContent], { type: "text/plain" });
+
+  // Create a link element
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(blob);
+  link.download = "blacklisted.txt";
+
+  // Trigger the download
+  link.click();
+
+  // Clean up
+  URL.revokeObjectURL(link.href);
 }
 </script>

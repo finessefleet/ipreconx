@@ -1,0 +1,16 @@
+blockers:
+CORS
+limited number of exposed soures of blacklisted IPs
+no access to Trusted soures of IPs
+live ip address updation - API flexibility issue
+
+Future scope:
+live ip address updation from authentic IP source
+
+Added test cases using vitest along with snapshots
+
+Features:
+blacklisted ip listing, pagination
+Ip search
+geolocation from Ip address
+
