@@ -94,17 +94,10 @@
   </div>
 </template>
 
-:class="{
-                  '': 
-                  'text-gray-500': vendor[1].result === 'unrated',
-                  'text-red-500': ,
-                  'text-yellow-500': vendor[1].result === 'suspicious'
-                }">
-                  {{ vendor[1].result || 'undetected' }}
-
 <script setup>
 import { ref, computed } from 'vue';
 import { useRoute } from 'vue-router';
+import moment from 'moment';
 
 const route = useRoute();
 const ip = ref();
@@ -128,13 +121,14 @@ const vendors = computed(() => {
   const sortedEntries = Object.entries(data.value.attributes.last_analysis_results).sort(([, a], [, b]) => {
     return customOrder.indexOf(a.result) - customOrder.indexOf(b.result);
   });
-  console.log('sortedEntries', sortedEntries)
   return sortedEntries;
 });
 
 const getFormatteddate = (timestamp) => {
   if (!timestamp) return 'N/A';
-  return new Date(timestamp * 1000).toLocaleString(); // Convert UNIX timestamp
+  
+  const dateFromTimestamp = moment.unix(timestamp); // use .unix() if input is in seconds
+  return dateFromTimestamp.fromNow();
 };
 
 const communityScore = computed(() => {
