@@ -1,178 +1,141 @@
+# 🛡️ IPReconX - Blacklisted IP Intelligence Viewer
 
-# 🛡️ IPReconX
+IPReconX is a powerful Vue.js-based application designed for cybersecurity professionals and enthusiasts to **visualize and analyze blacklisted IPs** using external threat intelligence sources like **VirusTotal**.
 
-**IPReconX** is an automated suspicious IP blacklist aggregator that collects, normalizes, and manages threat intelligence feeds from multiple public sources. It is designed to help cybersecurity professionals and SOC teams enrich their detection workflows by offering an up-to-date, deduplicated IP blacklist in a usable format.
+## 🚀 Project Objective
 
----
-
-## 📌 Features
-
-- ✅ Fetches IP data from multiple threat intel feeds
-- 🔄 Normalizes and deduplicates incoming data
-- 📁 Outputs blacklist in JSON and TXT formats
-- 🌐 Lightweight dashboard to view and download data
-- 🔁 Easily extensible with new sources or custom formats
-- 🔍 Timestamp tracking for `firstSeen` and `lastSeen`
-- ⚙️ Cron/CI compatible for scheduled updates
+The main goal of IPReconX is to:
+- Help security teams **identify malicious IP addresses** in real-time.
+- Enable **quick IP reputation checks** through VirusTotal integration.
+- Provide an intuitive UI for navigating large IP blacklists with ease.
 
 ---
 
-## 🏗️ Project Architecture
+## 🧩 Features
 
-```
-ipreconx/
-│
-├── src/
-│   ├── feeds/            # Feed-specific fetching modules
-│   ├── normalize.js      # Normalize raw feed data
-│   ├── dedupe.js         # Merge and deduplicate IPs
-│   └── updater.js        # Orchestrates fetching, deduplication and output
-│
-├── public/               # Vue.js frontend for viewing blacklists
-├── test/                 # Unit tests for normalization and merging logic
-├── blacklist.txt         # Plain list of IPs for firewall/SIEM use
-├── blacklist.json        # Structured output with metadata
-│
-├── .env.example          # Environment variable template
-├── vite.config.js        # Frontend bundler config
-├── package.json          # Project metadata and scripts
-└── README.md             # You are here.
-```
+- 🔍 **Search** and filter blacklisted IPs.
+- 📄 **Paginated results** for efficient viewing of large data.
+- 📊 **Detailed IP reputation reports** via VirusTotal.
+- 📦 Modular and clean Vue 3 components for scalability.
 
 ---
 
-## 🚀 How It Works
+## 📂 Project Structure
 
-1. **Fetching Feeds**  
-   Feed modules in `src/feeds/` connect to public threat sources like AbuseIPDB, open threat lists, malware domain trackers, etc.
+### 1. `BlackListedIps.vue`
+- The **main component** displaying the blacklisted IPs list.
+- Handles:
+  - Search filtering.
+  - Pagination control.
+  - Navigation to the IP details page.
 
-2. **Normalization**  
-   Each IP entry is parsed into a consistent format:
-   ```json
-   {
-     "ip": "192.168.1.1/32",
-     "firstSeen": "2025-06-01T12:00:00Z",
-     "lastSeen": "2025-06-25T08:00:00Z",
-     "source": "abuseipdb"
-   }
+### 2. `IpDetails.vue`
+- Displays **detailed threat intelligence** of a selected IP using **VirusTotal API**.
+- Shows:
+  - IP reputation.
+  - Associated domains.
+  - Threat categories.
+  - Last analysis stats.
+
+### 3. `Pagination.vue`
+- A **reusable component** to handle paginated data.
+- Provides previous/next page buttons and current page status.
+
+---
+
+## 🖼️ Screenshots
+
+> _(You can add screenshots of the UI here)_
+
+---
+
+## 🔧 How to Run the Project
+
+### 📦 Requirements
+- Node.js (v14+)
+- Vue CLI (`npm install -g @vue/cli`)
+
+### 🛠️ Setup Instructions
+
+1. **Clone the Repository**
+   ```bash
+   git clone https://github.com/yourusername/ipreconx.git
+   cd ipreconx
    ```
 
-3. **Deduplication**  
-   Duplicate entries are merged. For each IP:
-   - Choose earliest `firstSeen`
-   - Choose latest `lastSeen`
-   - Combine `source` fields
+2. **Install Dependencies**
+   ```bash
+   npm install
+   ```
 
-4. **Output**  
-   After processing:
-   - `blacklist.txt` contains IPs/CIDRs only (for firewalls)
-   - `blacklist.json` contains full metadata (for analysis, APIs)
+3. **Configure VirusTotal API Key**
+   - Create a `.env` file in the root directory:
+     ```
+     VITE_VIRUSTOTAL_API_KEY=your_virustotal_api_key
+     ```
 
-5. **UI (Optional)**  
-   Simple Vue.js interface to:
-   - View current blacklist
-   - Trigger updates
-   - Download outputs
-
----
-
-## ⚙️ Setup Instructions
-
-### 1. Clone the Repository
-
-```bash
-git clone https://github.com/finessefleet/ipreconx.git
-cd ipreconx
-```
-
-### 2. Install Dependencies
-
-```bash
-npm ci
-```
-
-### 3. Configure Environment
-
-Copy `.env.example` and fill in details:
-
-```bash
-cp .env.example .env
-```
-
-### 4. Run Locally
-
-```bash
-npm start         # Executes updater script
-npm run dev       # Launches frontend dashboard
-```
-
-### 5. Run Tests
-
-```bash
-npm test
-```
+4. **Run the App**
+   ```bash
+   npm run dev
+   ```
 
 ---
 
-## 🧪 Testing Strategy
+## 🧠 How It Works
 
-- All normalization and deduplication logic is tested via `test/unit/`
-- Includes edge cases like:
-  - Invalid IPs
-  - Mixed CIDR and IP
-  - Conflicting timestamps
-  - Overlapping sources
+- IP data (blacklist) is fetched from a remote or local JSON file or API.
+- Clicking on an IP routes to `IpDetails.vue`, which fetches real-time data from [VirusTotal](https://www.virustotal.com/) using their API.
+- Pagination improves UI performance when handling hundreds/thousands of entries.
 
 ---
 
-## 🧭 Use Cases
+## 🔐 About VirusTotal API
 
-| Use Case                  | Description |
-|---------------------------|-------------|
-| 🔥 Firewall Integration    | Load `blacklist.txt` into iptables/pf |
-| 📊 SOC Dashboards         | Show suspicious IP activity trends |
-| 🔍 Analyst Verification    | Compare external feeds with internal logs |
-| ⚠️ SIEM Alert Enrichment  | Add context to logs using IP metadata |
+To access VirusTotal data:
+- Create an account at [virustotal.com](https://www.virustotal.com/)
+- Navigate to your profile > API Key
+- Add the key to your `.env` file as shown above
 
----
-
-## ➕ Adding a New Feed
-
-1. Create a file under `src/feeds/`, e.g. `newsource.js`
-2. Export a `fetch()` function that returns an array of IPs or objects
-3. Normalize using existing structure in `normalize.js`
-4. Add it to the `updater.js` feed loop
+> Note: Free tier has request limits (~500/day). Use wisely.
 
 ---
 
-## 🧰 Tech Stack
+## 💡 Future Improvements
 
-- **Node.js** (Data processing)
-- **Vue.js** (Frontend UI)
-- **Jest** or **Vitest** (Testing)
-- **Vite** (Frontend bundling)
-- **dotenv** (Env configs)
-
----
-
-## 👨‍💻 Contributors
-
-- Aryan Biju  
-- Richu Suresh  
-(Team FinesseFleet)
+- 🔔 Notifications for new threats.
+- 📈 Dashboard with charts.
+- 🧾 Export reports (PDF, CSV).
+- 🧠 Integration with other threat intel platforms (e.g., AbuseIPDB, GreyNoise).
 
 ---
 
-## 📄 License
+## 🧑‍💻 Author
 
-This project is open source and available under the [MIT License](LICENSE).
+**Aryan Biju**  
+Cybersecurity Developer & Analyst  
+[LinkedIn](https://www.linkedin.com/in/aryanbiju) | [GitHub](https://github.com/finessefleet)
+
+---
+
+## ⚖️ License
+
+This project is licensed under the MIT License.  
+Feel free to fork, enhance, and contribute!
 
 ---
 
-## 📣 Final Note
+## 🙏 Acknowledgements
 
-This project was built as part of a cybersecurity initiative to simplify and centralize blacklisting workflows. It combines the power of automation, analysis, and modularity, making it suitable for both personal SOC tools and enterprise security pipelines.
+- [VirusTotal](https://www.virustotal.com/)
+- Vue.js Documentation
+- Open source community
 
-Feel free to fork, extend, or contribute. Threat intelligence should be accessible to all defenders.
 
 ---
+
+## 🧑‍🏫 Mentor
+
+**Tapomoy Adhikari**  
+Principal Advisor, Finesse Fleet  
+Guided the IPReconX project from concept to execution with strategic mentorship and expert advice.
+
