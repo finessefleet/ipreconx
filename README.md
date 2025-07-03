@@ -111,7 +111,7 @@ To access VirusTotal data:
 
 ## 🧑‍💻 Author
 
-**Aryan Biju**  
+**Aryan B**, **Richu Suresh**
 Cybersecurity Developer & Analyst  
 [LinkedIn](https://www.linkedin.com/in/aryanbiju) | [GitHub](https://github.com/finessefleet)
 
